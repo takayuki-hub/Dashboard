@@ -1,0 +1,17 @@
+# Android / Gradle
+.gradle/
+/build/
+/captures/
+local.properties
+.externalNativeBuild/
+.cxx/
+
+# IDE (Android Studio / IntelliJ / VS Code)
+.idea/
+*.iml
+
+# Kotlin
+.kotlin/
+
+# OS生成ファイル
+.DS_Store
