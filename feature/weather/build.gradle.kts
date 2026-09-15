@@ -34,9 +34,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 
+    implementation(project(":core:analytics"))
+    implementation(project(":core:data"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
-    implementation(project(":core:data"))
 
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)

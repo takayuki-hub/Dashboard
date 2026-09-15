@@ -30,8 +30,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:designsystem"))
+    implementation(project(":core:analytics"))
     implementation(project(":core:data"))
+    implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
 
     implementation(libs.androidx.appcompat)

@@ -1,0 +1,65 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+      - 'feature/**' # Gitleaks用のpush検知
+  pull_request:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+      - 'feature/**' # Gitleaks用のPR検知
+
+jobs:
+  # --- Job 1: Gitleaks によるシークレット漏洩チェック (全ブランチ対象) ---
+  gitleaks:
+    name: Check Hardcoded Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # --- Job 2: Android ビルド & 単体テスト (main / develop / release のみ) ---
+  build-and-test:
+    name: Build & Test Android App
+    # main, develop, release 関連の push / PR のみ実行する判定
+    if: |
+      github.ref_name == 'main' || 
+      github.ref_name == 'develop' || 
+      startsWith(github.ref_name, 'release/') ||
+      github.base_ref == 'main' || 
+      github.base_ref == 'develop' || 
+      startsWith(github.base_ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug

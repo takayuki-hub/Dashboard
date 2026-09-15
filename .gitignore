@@ -1,6 +1,6 @@
 # Android / Gradle
 .gradle/
-/build/
+build/
 /captures/
 local.properties
 .externalNativeBuild/
@@ -9,9 +9,12 @@ local.properties
 # IDE (Android Studio / IntelliJ / VS Code)
 .idea/
 *.iml
+!.idea/dictionaries/
 
 # Kotlin
 .kotlin/
 
 # OS生成ファイル
 .DS_Store
+
+# Firebase (google-services.json は各モジュールの .gitignore で管理)

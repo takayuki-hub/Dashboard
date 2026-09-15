@@ -2,6 +2,8 @@ package com.github.takayuki_hub.dashboard.feature.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.takayuki_hub.dashboard.core.analytics.constants.AnalyticsEvents
+import com.github.takayuki_hub.dashboard.core.analytics.repository.AnalyticsRepository
 import com.github.takayuki_hub.dashboard.core.data.repository.NewsRepository
 import com.github.takayuki_hub.dashboard.core.data.repository.TaskRepository
 import com.github.takayuki_hub.dashboard.core.data.repository.WeatherRepository
@@ -18,8 +20,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     weatherRepository: WeatherRepository,
     newsRepository: NewsRepository,
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val analyticsRepository: AnalyticsRepository
 ) : ViewModel() {
+
+    init {
+        // 画面表示イベントを記録
+        viewModelScope.launch {
+            analyticsRepository.logScreenView(AnalyticsEvents.SCREEN_HOME)
+        }
+    }
 
     val uiState: StateFlow<HomeUiState> = combine(
         weatherRepository.getWeatherDataStream(latitude = 35.4437, longitude = 139.6380), // 緯度経度を指定
@@ -43,6 +53,11 @@ class HomeViewModel @Inject constructor(
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) {
         viewModelScope.launch {
             taskRepository.updateTask(task.copy(isCompleted = isChecked))
+            // タスク編集イベントを記録
+            analyticsRepository.logEvent(
+                eventName = AnalyticsEvents.TASK_EDITED,
+                params = emptyMap()
+            )
         }
     }
 
@@ -51,6 +66,11 @@ class HomeViewModel @Inject constructor(
         if (title.isBlank()) return
         viewModelScope.launch {
             taskRepository.insertTask(Task(title = title))
+            // タスク作成イベントを記録
+            analyticsRepository.logEvent(
+                eventName = AnalyticsEvents.TASK_CREATE_CLICKED,
+                params = emptyMap()
+            )
         }
     }
 }

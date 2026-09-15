@@ -24,11 +24,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "Dashboard"
 include(":app")
-include(":core:designsystem")
-include(":feature:weather")
-include(":core:network")
-include(":feature:news")
-include(":core:model")
+include(":core:analytics")
 include(":core:data")
+include(":core:designsystem")
+include(":core:model")
+include(":core:network")
 include(":feature:home")
+include(":feature:news")
 include(":feature:task")
+include(":feature:weather")

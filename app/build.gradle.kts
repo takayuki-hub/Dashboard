@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -36,15 +37,17 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
+    implementation(project(":core:designsystem"))
     implementation(project(":feature:home"))
-    implementation(project(":feature:weather"))
     implementation(project(":feature:news"))
     implementation(project(":feature:task"))
-    implementation(project(":core:designsystem"))
+    implementation(project(":feature:weather"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -68,5 +71,6 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
-
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }

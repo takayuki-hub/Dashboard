@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "tsumiki@tsumiki": true,
+    "tsumiki-legacy@tsumiki": true
+  }
+}
